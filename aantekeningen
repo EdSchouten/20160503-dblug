@@ -9,6 +9,7 @@
     - Veel libraries: Boost, graphics, audio libraries, etc.
     - Ook al wat apps: Memcached.
   - Cross platform: 1 keer compileren, precies dezelfde executable
+    - CloudABI gebruikt ELF met een eigen EI_OSABI (== 17)
     - Ports voor Linux en FreeBSD
       - Aanpassingen aan de kernel om executables te kunnen draaien
     - Voor Mac OS X: een userspace-emulator
@@ -52,3 +53,15 @@
         - nm relocations | grep '\<j\>'
         - readelf -r relocations | grep adres_van_j
         - nm relocations | grep target_van_relocation
+
+    - Aan de implementatiekant:
+      cloudabi-utils -> src/libemulator/emulate.c:52-146
+      cloudlibc -> src/crt/crt0.c
+
+3. System calls / vDSO
+  - Tijdens system calls switchen applicaties naar het OS door "syscall"
+    te gebruiken.
+    - Onder FreeBSD: objdump -d /lib/libc.so.7 | less
+      - Kijk naar functie <__sys_open>.
+  - Onhandig als CloudABI-applicaties dat ook doen in de emulator, want
+    dan roep je system calls van OS X aan.
