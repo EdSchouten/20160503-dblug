@@ -4,13 +4,5 @@ socket: !socket
   bind: 0.0.0.0:12345
 logfile: !fd stdout
 message: |
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>Demo webserver</title>
-    </head>
-    <body>
-      <h1>Hallo, dbLUG-bezoekers!</h1>
-      <p>Dit is een simpele webserver draaiende binnen CloudABI.</p>
-    </body>
-  </html>
+  <h1>Hallo, dbLUG-bezoekers!</h1>
+  <p>Dit is een simpele webserver draaiende binnen CloudABI.</p>
