@@ -1,0 +1,54 @@
+1. Introductie
+  - Capability-based security
+  - Onder Mac OS X: demo-cloudabi-run/:
+    - x86_64-unknown-cloudabi-cc -o webserver webserver.c
+    - cloudabi-run -e webserver < webserver.yaml
+  - Consistente ontwikkelomgeving: CloudABI Ports
+    - Onder Mac OS X: brew search nuxinl/cloudabi
+    - Onder FreeBSD: pkg search -r CloudABI '.*'
+    - Veel libraries: Boost, graphics, audio libraries, etc.
+    - Ook al wat apps: Memcached.
+  - Cross platform: 1 keer compileren, precies dezelfde executable
+    - Ports voor Linux en FreeBSD
+      - Aanpassingen aan de kernel om executables te kunnen draaien
+    - Voor Mac OS X: een userspace-emulator
+      - C-applicatie die direct een executable mmap()t en uitvoert
+  - Onderwerp van vandaag: hoe werkt emulatie onder Mac OS X?
+
+2. Applicaties inladen / position independent executables
+  - Traditioneel worden applicaties altijd op hetzelfde adres ingeladen
+  - Onder FreeBSD: demo-fixed-address/:
+    - cc -o fixed-address fixed-address.c
+    - ./fixed-address
+    - nm fixed-address | grep global_variable
+    - objdump -d fixed-address | less
+      - Kijk naar functie <main>.
+  - Problematisch voor emulatie: wat als de emulator zelf op dat adres
+    draait? Hoe krijg je dan nog de executable ingeladen?
+  - Oplossing: Position Independent Executables
+    - Applicaties die onder ieder adres ingeladen kunnen worden
+  - RIP-relative addressing
+    - Onder FreeBSD: demo-fixed-address/:
+      - x86_64-unknown-cloudabi-cc -o fixed-address fixed-address.c
+      - objdump -d fixed-address | less
+        - Kijk naar functie <main>.
+        - Python: '%x' % (adres volgende instructie + offset in asm)
+      - nm fixed-address | grep global_variable
+    - Machine-code wordt volledig position independent, zonder hulp van
+      runtime environment
+
+  - Relocations
+    - Globale variabelen en constanten kunnen ook pointer-waarden
+      bevatten die afhankelijk zijn van het laadadres
+      - Zie demo-relocations/relocations.c
+    - Relocations zijn notities in de header van de executable om
+      verwijzingen te maken naar andere locaties binnen de applicatie.
+    - Wordt ook gebruikt voor dynamisch linken
+      - Onder FreeBSD: readelf -r /bin/ls
+    - PIE gebruikt ook relocations om initialisatie van globale
+      variabelen en constanten te fixen.
+      - Onder FreeBSD: demo-relocations/:
+        - x86_64-unknown-cloudabi-cc -o relocations relocations.c
+        - nm relocations | grep '\<j\>'
+        - readelf -r relocations | grep adres_van_j
+        - nm relocations | grep target_van_relocation
