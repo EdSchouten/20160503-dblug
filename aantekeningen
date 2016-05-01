@@ -64,4 +64,8 @@
     - Onder FreeBSD: objdump -d /lib/libc.so.7 | less
       - Kijk naar functie <__sys_open>.
   - Onhandig als CloudABI-applicaties dat ook doen in de emulator, want
-    dan roep je system calls van OS X aan.
+    dan roep je system calls van OS X aan. Er is geen efficiënte manier
+    om syscall-instructies te onderscheppen.
+  - Linux vDSO: Shared library gebruikt toegang naar klokken te versnellen
+    - Onder Linux: ldd /bin/ls -> linux-vdso.so.1
+    
