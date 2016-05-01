@@ -3,5 +3,5 @@
 int global_variable;
 
 int main() {
-  printf("%p\n", &global_variable);
+  fprintf(stderr, "%p\n", &global_variable);
 }
