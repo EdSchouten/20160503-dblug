@@ -67,7 +67,7 @@
   - Onhandig als CloudABI-applicaties dat ook doen in de emulator, want
     dan roep je system calls van OS X aan. Er is geen efficiënte manier
     om syscall-instructies te onderscheppen.
-  - Linux vDSO: Shared library gebruikt toegang naar klokken te versnellen
+  - Linux vDSO: Shared library om toegang naar klokken te versnellen
     - Onder Linux:
       - ldd /bin/ls -> linux-vdso.so.1
       - man 7 vdso
@@ -93,7 +93,7 @@
   - Vroeger was errno een globale variabele. Toen kwam multi-threading.
     Per-thread errno in Thread Control Block.
     freebsd -> sys/sys/errno.h:41-47
-  - C11/: _Thread_local, C++11: thread_local
+  - C11: _Thread_local, C++11: thread_local
   - Onder Mac OS X: demo-tls/
     - Illustraties: tls-x86_64.pdf, tls-win32.pdf
     - x86_64-unknown-cloudabi-cc -o tls tls.c
