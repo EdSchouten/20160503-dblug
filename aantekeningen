@@ -28,6 +28,7 @@
     draait? Hoe krijg je dan nog de executable ingeladen?
   - Oplossing: Position Independent Executables
     - Applicaties die onder ieder adres ingeladen kunnen worden
+    - Onder Linux e.d. gebruikt voor ASLR
   - RIP-relative addressing
     - Onder FreeBSD: demo-fixed-address/:
       - x86_64-unknown-cloudabi-cc -o fixed-address fixed-address.c
