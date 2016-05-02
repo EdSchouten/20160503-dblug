@@ -67,5 +67,25 @@
     dan roep je system calls van OS X aan. Er is geen efficiënte manier
     om syscall-instructies te onderscheppen.
   - Linux vDSO: Shared library gebruikt toegang naar klokken te versnellen
-    - Onder Linux: ldd /bin/ls -> linux-vdso.so.1
-    
+    - Onder Linux:
+      - ldd /bin/ls -> linux-vdso.so.1
+      - man 7 vdso
+        - Kijk naar "x86_64 functions"
+    - Onder Linux: demo-getauxval/
+       - cc -o getauxval getauxval.c
+       - ./getauxval
+    - Onder Linux: demo-clocks/
+      - cc -o clocks clocks.c
+      - time ./clocks
+      - cc -o clocks clocks.c -static
+      - time ./clocks
+  - CloudABI's vDSO is een generalisatie van die van Linux: één functie
+    per system call. De emulator hoeft dus geen "syscall" af te vangen;
+    het kan direct functiecalls ontvangen van de applicatie.
+
+  - Aan de implementatiekant:
+    cloudabi -> cloudabi.txt
+    cloudabi-utils -> src/libemulator/emulate.c:148-244
+    cloudlibc -> src/crt/crt0.c:106-172, :216-218, :310-313
+
+4. Thread-local storage
