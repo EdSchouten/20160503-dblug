@@ -89,3 +89,30 @@
     cloudlibc -> src/crt/crt0.c:106-172, :216-218, :310-313
 
 4. Thread-local storage
+  - Vroeger was errno een globale variabele. Toen kwam multi-threading.
+    Per-thread errno in Thread Control Block.
+    freebsd -> sys/sys/errno.h:41-47
+  - C11/: _Thread_local, C++11: thread_local
+  - Onder Mac OS X: demo-tls/
+    - Illustraties: tls-x86_64.pdf, tls-win32.pdf
+    - x86_64-unknown-cloudabi-cc -o tls tls.c
+    - x86_64-unknown-objdump -d tls
+    - Illustraties: tls-aarch64.pdf
+    - aarch64-unknown-cloudabi-cc -o tls tls.c
+    - aarch64-unknown-objdump -d tls
+
+  - Problematiek met emulatie: als de CloudABI-applicatie zijn eigen
+    TLS-ruimte installeert, verknal je TLS voor Mac OS X.
+    - Oplossing: CloudABI laat de TCB met rust. De TCB mag gebruikt
+      worden door de emulator om een backup te maken van het adres van
+      zijn eigen TLS-ruimte.
+    - Aan de implementatiekant:
+      cloudabi-utils -> src/libemulator/tls.c:103-130
+      cloudlibc -> src/common/tls.h:118-127
+
+  - Mac OS X gebruikt gsbase. fsbase wijst naar een ongeldig geheugenadres.
+    - fsbase is ook niet schrijfbaar. Tegenwoordig is daar een
+      instructie voor (wrfsbase), maar Mac OS X heeft die uitgeschakeld.
+    - Observatie: alle instructies voor %fs gebruiken 0x64. Voor %gs is
+      dat 0x65. Signal handler om segmentation faults af te handelen.
+      cloudabi-utils -> src/libemulator/tls.c:30-53, :82-95
