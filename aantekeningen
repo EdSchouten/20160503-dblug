@@ -17,7 +17,8 @@
   - Onderwerp van vandaag: hoe werkt emulatie onder Mac OS X?
 
 2. Applicaties inladen / position independent executables
-  - Traditioneel worden applicaties altijd op hetzelfde adres ingeladen
+  - Traditioneel worden applicaties altijd op hetzelfde adres ingeladen.
+    Ieder proces krijgt zijn eigen virtuele address space.
   - Onder FreeBSD: demo-fixed-address/:
     - cc -o fixed-address fixed-address.c
     - ./fixed-address
